@@ -1,0 +1,72 @@
+<!-- <!DOCTYPE html> -->
+<!-- I commented the doc type because the icofont throws some errors related to file compression size -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="author" content="{{page_author}}"/>
+    <title>{{activePage}} | {{app_name}}
+    </title>
+    <link rel="stylesheet" href="assets/css/output.css"/>
+    <link rel="stylesheet" href="assets/css/icofont/icofont.min.css"/>
+  </head>
+  <body class="bg-purple-100">
+    <div class="flex h-[100vh]">
+      {# sidebar #} 
+      {% include "./partials/left-sidebar.njk" %}
+      <div class="main-wrapper bg-white w-11/12 h-100vh">
+       {# header #}
+       {% include "./partials/header.njk" %}
+        <div class="main-content px-4 py-4">
+          <!-- main content -->
+
+          {% include "./partials/bread-crumbs.njk" %}
+          {% block content %}{% endblock %}
+          <!-- ./main content -->
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      var menuButton = document.getElementById("menu-button");
+      var menuConent = document.querySelector('[aria-labelledby="menu-button"]');
+      menuConent
+        .classList
+        .add("hidden");
+
+      const toggleMenu = () => {
+        // if (menuConent.classList.contains("hidden")) {
+        //   menuConent.classList.remove("hidden");
+        // } else {
+        //   menuConent.classList.add("hidden");
+        // }
+        menuConent
+          .classList
+          .toggle("hidden")
+      };
+      menuButton.addEventListener("click", () => {
+        toggleMenu();
+      });
+
+      // document.addEventListener('click',(event) => {
+      //     console.log(event.target)
+      //     if(event.target.matches('.menu-button')) {
+
+      //     }
+      //     if(!menuConent.classList.contains('hidden')) {
+      //         menuConent.classList.add('hidden')
+      //     }
+      // })
+      //close the window
+      window.onclick = (event) => {
+        if (!event.target.matches("#menu-button") && !event.target.matches("#menu-button>i")) {
+          if (!menuConent.classList.contains("hidden")) {
+            menuConent
+              .classList
+              .add("hidden");
+          }
+        }
+      };
+    </script>
+  </body>
+</html>

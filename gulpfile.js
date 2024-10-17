@@ -1,65 +1,78 @@
-var wrap = require('gulp-wrap');
-var gulp = require('gulp');
-//serve files as static
-var connect = require('connect');
-var serveStatic = require('serve-static');
-var serveIndex = require('serve-index');
+const gulp = require('gulp')
+const nunjucksRender = require('gulp-nunjucks-render')
+const data = require('gulp-data')
+const serveStatic = require('serve-static')
+const serveIndex = require('serve-index')
 
-//this is template engine
-var nunjucksRender = require('gulp-nunjucks-render');
+var browserSync = require('browser-sync').create();
 
-const merge = require("merge-stream");
 
-gulp.task('layout', function () {
-    return gulp.src(['src/**/*.html', '!src/layout.html'])
-        // .pipe(wrap({ src: 'src/layout.html' }))
-        .pipe(nunjucksRender())
+//compile html files
+gulp.task('html', (done) => {
+    //copying the files from src to dist
+    gulp.src("src/pages/*")
+        .pipe(data(function () {
+            return require("./src/data/page_data.json")
+        }))
+        .pipe(nunjucksRender({
+            path: ["src/templates"]
+        }))
         .pipe(gulp.dest('dist'));
+    done();
+})
 
+gulp.task('img', function () {
+    return gulp.src('./src/assets/img/**', { encoding: false })
+        .pipe(gulp.dest('./dist/assets/img'));
 });
 
-//copy assets
-gulp.task('copy-img', function () {
-    return gulp.src('./src/img/**',{encoding: false})
-        .pipe(gulp.dest('./dist/img'));
-});
-gulp.task('copy-css', function () {
-    return gulp.src('./src/css/**/*',{encoding: false})
-        .pipe(gulp.dest('./dist/css'));
+gulp.task('css', function () {
+    return gulp.src('./src/assets/css/**/*', { encoding: false })
+        .pipe(gulp.dest('./dist/assets/css'));
 });
 
+gulp.task('js', (done) => {
+    //copying the files from src to dist
+    gulp.src("src/assets/js/**/*")
+        .pipe(gulp.dest('dist/assets/js'));
+    done();
+})
 
-// gulp.task('copy-resources', function () {
-//     return merge([
-//         gulp.src('./src/img/**').pipe(gulp.dest('./dist/img')),
-//         gulp.src('./src/css/**').pipe(gulp.dest('./dist/css'))
-//     ]);
-// });
+gulp.task('connect', function (done) {
+    // var app = require('connect')()
+    //     .use(serveStatic('dist'))
+    //     .use(serveStatic('dist'))
+    //     .use(serveIndex('dist'));
 
-gulp.task('connect', gulp.series('layout'), function () {
-    var app = require('connect')()
-        .use(serveStatic('.tmp'))
-        .use(serveStatic('src'))
-        .use(serveIndex('src'));
-
-    require('http').createServer(app)
-        .listen(3000)
-        .on('listening', function () {
-            console.log('Started connect web server on http://localhost:3000');
-        });
+    // require('http').createServer(app)
+    //     .listen(3000)
+    //     .on('listening', function () {
+    //         console.log('Started connect web server on http://localhost:3000');
+    //     });
+    done();
 });
 
-gulp.task('layout', function () {
-    nunjucksRender.nunjucks.configure(['app']);
-
-    return gulp.src(['src/**/*.html', '!src/layout.html'])
-        .pipe(nunjucksRender())
-        .pipe(gulp.dest('.tmp'));
+gulp.task('browser-sync', function (done) {
+    browserSync.init({
+        server: {
+            baseDir: "./dist"
+        }
+    });
+    done();
 });
 
-gulp.task('watch', gulp.series('layout'), function () {
-    gulp.watch('src/*.html', gulp.series('layout'));
-});
+gulp.task('serve', gulp.series(['html', 'css', 'img', 'js']));
+
+gulp.task('watch', (done) => {
+    gulp.watch("./src/**/*", gulp.series(['serve'])).on('change', browserSync.reload);
+    done();
+})
+
+
+
+
+//copy assets files
+gulp.task('default', gulp.series(['watch', 'serve', 'browser-sync']));
 
 
 
@@ -67,6 +80,7 @@ gulp.task('watch', gulp.series('layout'), function () {
 
 
 
-gulp.task('default', gulp.series('layout', 'connect', 'watch', 'copy-img','copy-css'));
 
-// module.exports = layout
+
+
+

@@ -1,0 +1,37 @@
+<div class="sidebar w-1.5/12 bg-indigo-600">
+    <div class="header flex items-center justify-center text-center text-white px-3 py-2 ">
+        <!-- <h6 class="text-xl">Anzflex UI</h6> -->
+        <img src="assets/img/anzflex-logo.png" class="h-16" alt="">
+    </div>
+    <div class="p-4">
+        <ul class="text-white">
+            <li
+              class="  rounded mb-2 {% if activePage=='Home'%} bg-indigo-700 {% endif %} hover:bg-indigo-700"
+            >
+                <a href="index.html" class="flex items-center px-3 py-3 gap-2 text-lg">
+                    <i class="icofont-home"></i> Home
+              </a>
+            </li>
+            <li class=" rounded mb-2 hover:bg-indigo-700 {% if activePage=='Tables'%} bg-indigo-700 {% endif %}">
+                <a href="tables.html" class="flex items-center px-3 py-3 gap-2  text-lg">
+                    <i class="icofont-list"></i> Tables
+              </a>
+            </li>
+            <li class=" rounded mb-2 hover:bg-indigo-700 {% if activePage=='Forms'%} bg-indigo-700 {% endif %}">
+                <a href="forms.html" class="flex items-center px-3 py-3 gap-2  text-lg">
+                    <i class="icofont-folder"></i> Forms
+              </a>
+            </li>
+            <li class=" rounded mb-2 hover:bg-indigo-700 {% if activePage=='Buttons'%} bg-indigo-700 {% endif %}">
+                <a href="buttons.html" class="flex items-center px-3 py-3 gap-2  text-lg">
+                    <i class="icofont-folder-open"></i> Buttons
+              </a>
+            </li>
+            <li class=" rounded mb-2 hover:bg-indigo-700 {% if activePage=='Cards'%} bg-indigo-700 {% endif %}">
+                <a href="cards.html" class="flex items-center px-3 py-3 gap-2  text-lg">
+                    <i class="icofont-cube"></i> Cards
+              </a>
+            </li>
+        </ul>
+    </div>
+</div>
